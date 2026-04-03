@@ -10,8 +10,8 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(i18n)
 
-// Hydrate list data from IndexedDB before mounting
+// Hydrate from IndexedDB before mounting
 const character = useCharacterStore(pinia)
-character.hydrateFromIDB().finally(() => {
+character.hydrate().finally(() => {
   app.mount('#app')
 })

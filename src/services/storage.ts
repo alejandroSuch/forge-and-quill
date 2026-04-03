@@ -1,14 +1,11 @@
 /**
- * Client-side persistence layer.
- * - localStorage: scalar character data (fast, synchronous reads on startup)
- * - IndexedDB: list data (possessions, codewords, titles, notes, ticks)
+ * Client-side persistence layer using IndexedDB.
+ * Single store "character" holds the full serialized state as one record.
  */
 
-const DB_NAME = 'vv-db'
+const DB_NAME = 'fq-db'
 const DB_VERSION = 1
-const STORES = ['possessions', 'codewords', 'titles', 'notes', 'ticks'] as const
-
-export type StoreName = (typeof STORES)[number]
+const STORE_NAME = 'character'
 
 let dbPromise: Promise<IDBDatabase> | null = null
 
@@ -18,10 +15,8 @@ function openDB(): Promise<IDBDatabase> {
     const req = indexedDB.open(DB_NAME, DB_VERSION)
     req.onupgradeneeded = () => {
       const db = req.result
-      for (const name of STORES) {
-        if (!db.objectStoreNames.contains(name)) {
-          db.createObjectStore(name, { keyPath: '_id', autoIncrement: true })
-        }
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME)
       }
     }
     req.onsuccess = () => resolve(req.result)
@@ -30,58 +25,32 @@ function openDB(): Promise<IDBDatabase> {
   return dbPromise
 }
 
-export async function idbGetAll<T>(store: StoreName): Promise<T[]> {
+export async function idbLoad(): Promise<Record<string, unknown>> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readonly')
-    const req = tx.objectStore(store).getAll()
-    req.onsuccess = () => resolve(req.result.map(stripId))
+    const tx = db.transaction(STORE_NAME, 'readonly')
+    const req = tx.objectStore(STORE_NAME).get('state')
+    req.onsuccess = () => resolve(req.result ?? {})
     req.onerror = () => reject(req.error)
   })
 }
 
-export async function idbPutAll<T>(store: StoreName, items: T[]): Promise<void> {
+export async function idbSave(data: Record<string, unknown>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readwrite')
-    const os = tx.objectStore(store)
-    os.clear()
-    items.forEach((item, i) => os.put({ ...item, _id: i }))
+    const tx = db.transaction(STORE_NAME, 'readwrite')
+    tx.objectStore(STORE_NAME).put(data, 'state')
     tx.oncomplete = () => resolve()
     tx.onerror = () => reject(tx.error)
   })
 }
 
-export async function idbClear(store: StoreName): Promise<void> {
+export async function idbClear(): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readwrite')
-    tx.objectStore(store).clear()
+    const tx = db.transaction(STORE_NAME, 'readwrite')
+    tx.objectStore(STORE_NAME).clear()
     tx.oncomplete = () => resolve()
     tx.onerror = () => reject(tx.error)
   })
-}
-
-export async function idbClearAll(): Promise<void> {
-  await Promise.all(STORES.map(s => idbClear(s)))
-}
-
-function stripId<T>(obj: T & { _id?: number }): T {
-  const { _id: _, ...rest } = obj
-  return rest as T
-}
-
-// localStorage helpers
-const LS_CHAR_KEY = 'vv-character'
-
-export function lsLoadCharacter(): Record<string, unknown> {
-  try {
-    const raw = localStorage.getItem(LS_CHAR_KEY)
-    if (raw) return JSON.parse(raw)
-  } catch { /* ignore */ }
-  return {}
-}
-
-export function lsSaveCharacter(data: Record<string, unknown>): void {
-  localStorage.setItem(LS_CHAR_KEY, JSON.stringify(data))
 }
