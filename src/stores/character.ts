@@ -98,29 +98,33 @@ export const useCharacterStore = defineStore('character', () => {
     strength: strength.value + modifiers.value.strength - woundPenalty.value,
   }))
 
-  const snapshot = computed(() => ({
-    name: name.value, god: god.value, companion: companion.value, book: book.value,
-    charm: charm.value, grace: grace.value, ingenuity: ingenuity.value, strength: strength.value,
-    blessings: blessings.value, wounded: wounded.value, glory: glory.value, scars: scars.value,
-    money: money.value, location: location.value,
-    possessions: possessions.value, titles: titles.value, codewords: codewords.value,
-    notes: notes.value, ticks: ticks.value,
-  }))
-
   function toJSON() {
-    return snapshot.value
+    return {
+      name: name.value, god: god.value, companion: companion.value, book: book.value,
+      charm: charm.value, grace: grace.value, ingenuity: ingenuity.value, strength: strength.value,
+      blessings: blessings.value, wounded: wounded.value, glory: glory.value, scars: scars.value,
+      money: money.value, location: location.value,
+      possessions: JSON.parse(JSON.stringify(possessions.value)),
+      titles: [...titles.value],
+      codewords: JSON.parse(JSON.stringify(codewords.value)),
+      notes: [...notes.value],
+      ticks: JSON.parse(JSON.stringify(ticks.value)),
+    }
   }
 
   // Auto-persist everything to IndexedDB (debounced)
+  // Use JSON.stringify as watch source: guarantees deep comparison
+  // and accesses every nested property so Vue tracks all deps.
   let saveTimer: ReturnType<typeof setTimeout> | null = null
-  function scheduleSave() {
-    if (saveTimer) clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => idbSave(toJSON()), 300)
-  }
 
-  watch(snapshot, () => {
-    if (hydrated.value) scheduleSave()
-  }, { deep: true })
+  watch(
+    () => JSON.stringify(toJSON()),
+    () => {
+      if (!hydrated.value) return
+      if (saveTimer) clearTimeout(saveTimer)
+      saveTimer = setTimeout(() => idbSave(toJSON()), 300)
+    },
+  )
 
   async function reset() {
     name.value = ''
