@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCharacterStore } from '../stores/character'
 
 defineEmits<{ close: [] }>()
 
+const { t } = useI18n()
 const store = useCharacterStore()
 
 const attrs = ['charm', 'grace', 'ingenuity', 'strength'] as const
@@ -26,9 +28,9 @@ const isDoubleSix = computed(() => die1.value === 6 && die2.value === 6)
 
 const result = computed(() => {
   if (!rolled.value) return ''
-  if (isDoubleOne.value) return 'FALLO AUTOMATICO'
-  if (isDoubleSix.value) return 'EXITO AUTOMATICO'
-  return total.value >= target.value ? 'EXITO' : 'FALLO'
+  if (isDoubleOne.value) return t('dice.auto_fail')
+  if (isDoubleSix.value) return t('dice.auto_success')
+  return total.value >= target.value ? t('dice.success') : t('dice.fail')
 })
 
 const isSuccess = computed(() => {
@@ -54,70 +56,63 @@ function useBlessing() {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="$emit('close')">
-    <div class="bg-vulcan-800 rounded-t-2xl w-full max-w-md p-4">
+  <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="$emit('close')" role="dialog" aria-modal="true">
+    <div class="bg-surface rounded-t-2xl w-full max-w-md p-4">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="font-heading text-gold-400 text-lg">Dados</h2>
-        <button @click="$emit('close')" class="text-parchment/50 text-xl px-2">&times;</button>
+        <h2 class="font-heading text-accent text-lg">{{ t('dice.title') }}</h2>
+        <button @click="$emit('close')" class="text-muted text-xl px-2">&times;</button>
       </div>
 
-      <!-- Attribute selector -->
       <div class="flex gap-1 mb-3">
         <button
           v-for="a in attrs" :key="a"
           @click="selectedAttr = a"
-          class="flex-1 rounded py-1.5 text-xs font-heading capitalize"
-          :class="selectedAttr === a ? 'bg-gold-500 text-vulcan-900' : 'bg-vulcan-700 text-parchment/70'"
+          class="flex-1 rounded py-1.5 text-xs font-heading"
+          :class="selectedAttr === a ? 'bg-accent text-on-accent' : 'bg-surface-alt text-muted'"
         >
-          {{ a }}
+          {{ t(`attributes.${a}`) }}
         </button>
       </div>
 
-      <!-- Target number -->
       <div class="flex items-center justify-center gap-3 mb-4">
-        <span class="text-parchment/70 text-sm">Dificultad:</span>
-        <button @click="target > 2 && target--" class="w-8 h-8 rounded bg-vulcan-700 active:bg-vulcan-600">-</button>
-        <span class="font-mono text-xl text-gold-400 w-8 text-center">{{ target }}</span>
-        <button @click="target < 20 && target++" class="w-8 h-8 rounded bg-vulcan-700 active:bg-vulcan-600">+</button>
+        <span class="text-muted text-sm">{{ t('dice.difficulty') }}</span>
+        <button @click="target > 2 && target--" class="w-8 h-8 rounded bg-surface-alt active:bg-border">-</button>
+        <span class="font-mono text-xl text-accent w-8 text-center">{{ target }}</span>
+        <button @click="target < 20 && target++" class="w-8 h-8 rounded bg-surface-alt active:bg-border">+</button>
       </div>
 
-      <!-- Dice display -->
       <div v-if="rolled" class="text-center mb-4">
         <div class="flex items-center justify-center gap-4 mb-2">
-          <div class="w-16 h-16 bg-vulcan-700 rounded-xl flex items-center justify-center text-3xl font-mono text-parchment border-2 border-vulcan-600">
+          <div class="w-16 h-16 bg-surface-alt rounded-xl flex items-center justify-center text-3xl font-mono border-2 border-border">
             {{ die1 }}
           </div>
-          <div class="w-16 h-16 bg-vulcan-700 rounded-xl flex items-center justify-center text-3xl font-mono text-parchment border-2 border-vulcan-600">
+          <div class="w-16 h-16 bg-surface-alt rounded-xl flex items-center justify-center text-3xl font-mono border-2 border-border">
             {{ die2 }}
           </div>
         </div>
-        <p class="text-parchment/60 text-xs mb-1">
-          {{ die1 }}+{{ die2 }} + {{ effectiveScore }} ({{ selectedAttr }}) = {{ die1 + die2 + effectiveScore }}
+        <p class="text-muted text-xs mb-1">
+          {{ die1 }}+{{ die2 }} + {{ effectiveScore }} ({{ t(`attributes.${selectedAttr}`) }}) = {{ die1 + die2 + effectiveScore }}
           vs {{ target }}
         </p>
-        <p
-          class="text-xl font-heading"
-          :class="isSuccess ? 'text-green-400' : 'text-ember-400'"
-        >
+        <p class="text-xl font-heading" :class="isSuccess ? 'text-success' : 'text-danger'">
           {{ result }}
         </p>
-        <p v-if="blessingUsed" class="text-gold-300 text-xs mt-1">Bendicion usada para re-tirar</p>
+        <p v-if="blessingUsed" class="text-accent text-xs mt-1">{{ t('dice.blessing_used') }}</p>
       </div>
 
-      <!-- Actions -->
       <div class="flex gap-2">
         <button
           @click="roll"
-          class="flex-1 bg-gold-500 text-vulcan-900 font-heading rounded-lg py-3 text-sm active:bg-gold-400"
+          class="flex-1 bg-accent text-on-accent font-heading rounded-lg py-3 text-sm active:opacity-80"
         >
-          🎲 Tirar 2d6
+          🎲 {{ t('dice.roll') }}
         </button>
         <button
           v-if="rolled && !isSuccess && store.blessings > 0"
           @click="useBlessing"
-          class="bg-vulcan-700 text-gold-400 font-heading rounded-lg py-3 px-4 text-sm active:bg-vulcan-600 border border-gold-500/30"
+          class="bg-surface-alt text-accent font-heading rounded-lg py-3 px-4 text-sm active:bg-border border border-accent/30"
         >
-          Bendicion ({{ store.blessings }})
+          {{ t('dice.blessing', { n: store.blessings }) }}
         </button>
       </div>
     </div>

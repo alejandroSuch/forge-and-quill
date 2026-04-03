@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCharacterStore } from '../stores/character'
 import { codewords } from '../data/codewords'
 import { books } from '../data/books'
 
 defineEmits<{ close: [] }>()
 
+const { t } = useI18n()
 const store = useCharacterStore()
 
 const bookCodes = computed(() => codewords[store.book] ?? [])
@@ -28,21 +30,20 @@ const currentBookTitle = computed(() => books.find(b => b.number === store.book)
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="$emit('close')">
-    <div class="bg-vulcan-800 rounded-t-2xl w-full max-w-md max-h-[85dvh] overflow-y-auto p-4">
+  <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="$emit('close')" role="dialog" aria-modal="true">
+    <div class="bg-surface rounded-t-2xl w-full max-w-md max-h-[85dvh] overflow-y-auto p-4">
       <div class="flex justify-between items-center mb-1">
-        <h2 class="font-heading text-gold-400 text-lg">Codewords</h2>
-        <button @click="$emit('close')" class="text-parchment/50 text-xl px-2">&times;</button>
+        <h2 class="font-heading text-accent text-lg">{{ t('codewords.title') }}</h2>
+        <button @click="$emit('close')" class="text-muted text-xl px-2">&times;</button>
       </div>
-      <p class="text-parchment/50 text-xs mb-3">Libro {{ store.book }}: {{ currentBookTitle }} ({{ activeCount }}/{{ bookCodes.length }})</p>
+      <p class="text-muted text-xs mb-3">{{ t('codewords.book_info', { n: store.book, title: currentBookTitle, active: activeCount, total: bookCodes.length }) }}</p>
 
-      <!-- Book tabs -->
       <div class="flex gap-1 mb-3 overflow-x-auto">
         <button
           v-for="b in books" :key="b.number"
           @click="store.book = b.number"
           class="px-3 py-1 rounded text-xs shrink-0"
-          :class="store.book === b.number ? 'bg-gold-500 text-vulcan-900' : 'bg-vulcan-700 text-parchment/70'"
+          :class="store.book === b.number ? 'bg-accent text-on-accent' : 'bg-surface-alt text-muted'"
         >
           {{ b.number }}
         </button>
@@ -53,7 +54,7 @@ const currentBookTitle = computed(() => books.find(b => b.number === store.book)
           v-for="code in bookCodes" :key="code"
           @click="toggle(code)"
           class="text-left rounded-lg px-3 py-2 text-sm transition-colors"
-          :class="isActive(code) ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40' : 'bg-vulcan-700 text-parchment/60'"
+          :class="isActive(code) ? 'bg-accent-subtle text-accent border border-accent/40' : 'bg-surface-alt text-muted'"
         >
           {{ code }}
         </button>

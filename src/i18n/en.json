@@ -1,0 +1,89 @@
+{
+  "app": {
+    "title": "Forge & Quill",
+    "reset": "Reset",
+    "reset_confirm_title": "Reset character?",
+    "reset_confirm_msg": "All data will be permanently deleted.",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "export": "Export",
+    "import": "Import"
+  },
+  "character": {
+    "book": "Book",
+    "name": "Name",
+    "section": "Section",
+    "god": "God",
+    "companion": "Companion",
+    "placeholder_name": "Your character"
+  },
+  "attributes": {
+    "charm": "Charm",
+    "grace": "Grace",
+    "ingenuity": "Ingenuity",
+    "strength": "Strength"
+  },
+  "stats": {
+    "blessings": "Blessings",
+    "wounded": "Wounded",
+    "wound_penalty": "-1 to all rolls",
+    "glory": "Glory",
+    "scars": "Scars",
+    "money": "Pyr"
+  },
+  "panels": {
+    "possessions": "Items",
+    "codewords": "Codes",
+    "ticks": "Ticks",
+    "titles": "Titles",
+    "notes": "Notes",
+    "map": "Map",
+    "dice": "Dice"
+  },
+  "possessions": {
+    "title": "Items ({count}/20)",
+    "item_name": "Item name",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "+ Add item"
+  },
+  "dice": {
+    "title": "Dice",
+    "difficulty": "Difficulty:",
+    "roll": "Roll 2d6",
+    "blessing": "Blessing ({n})",
+    "blessing_used": "Blessing used to re-roll",
+    "auto_fail": "AUTO FAIL",
+    "auto_success": "AUTO SUCCESS",
+    "success": "SUCCESS",
+    "fail": "FAIL"
+  },
+  "notes": {
+    "title": "Notes ({count})",
+    "placeholder": "New note..."
+  },
+  "titles": {
+    "title": "Titles ({count})"
+  },
+  "codewords": {
+    "title": "Codewords",
+    "book_info": "Book {n}: {title} ({active}/{total})"
+  },
+  "ticks": {
+    "title": "Tick Boxes",
+    "book_info": "Book {n}: {title}"
+  },
+  "map": {
+    "title": "Map",
+    "reset": "Reset"
+  },
+  "io": {
+    "export": "Export JSON",
+    "import": "Import JSON",
+    "import_confirm": "This will replace all current data. Continue?"
+  },
+  "footer": {
+    "source": "Source code",
+    "support": "Buy me a coffee"
+  }
+}

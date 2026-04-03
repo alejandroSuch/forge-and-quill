@@ -1,0 +1,89 @@
+{
+  "app": {
+    "title": "Forge & Quill",
+    "reset": "Reset",
+    "reset_confirm_title": "¿Reiniciar personaje?",
+    "reset_confirm_msg": "Todos los datos se eliminarán permanentemente.",
+    "confirm": "Eliminar",
+    "cancel": "Cancelar",
+    "export": "Exportar",
+    "import": "Importar"
+  },
+  "character": {
+    "book": "Libro",
+    "name": "Nombre",
+    "section": "Sección",
+    "god": "Dios",
+    "companion": "Compañero",
+    "placeholder_name": "Tu personaje"
+  },
+  "attributes": {
+    "charm": "Charm",
+    "grace": "Grace",
+    "ingenuity": "Ingenuity",
+    "strength": "Strength"
+  },
+  "stats": {
+    "blessings": "Bendiciones",
+    "wounded": "Herido",
+    "wound_penalty": "-1 a todas las tiradas",
+    "glory": "Gloria",
+    "scars": "Cicatrices",
+    "money": "Pyr"
+  },
+  "panels": {
+    "possessions": "Objetos",
+    "codewords": "Códigos",
+    "ticks": "Ticks",
+    "titles": "Títulos",
+    "notes": "Notas",
+    "map": "Mapa",
+    "dice": "Dados"
+  },
+  "possessions": {
+    "title": "Objetos ({count}/20)",
+    "item_name": "Nombre del objeto",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "add": "+ Añadir objeto"
+  },
+  "dice": {
+    "title": "Dados",
+    "difficulty": "Dificultad:",
+    "roll": "Tirar 2d6",
+    "blessing": "Bendición ({n})",
+    "blessing_used": "Bendición usada para re-tirar",
+    "auto_fail": "FALLO AUTOMÁTICO",
+    "auto_success": "ÉXITO AUTOMÁTICO",
+    "success": "ÉXITO",
+    "fail": "FALLO"
+  },
+  "notes": {
+    "title": "Notas ({count})",
+    "placeholder": "Nueva nota..."
+  },
+  "titles": {
+    "title": "Títulos ({count})"
+  },
+  "codewords": {
+    "title": "Codewords",
+    "book_info": "Libro {n}: {title} ({active}/{total})"
+  },
+  "ticks": {
+    "title": "Tick Boxes",
+    "book_info": "Libro {n}: {title}"
+  },
+  "map": {
+    "title": "Mapa",
+    "reset": "Reset"
+  },
+  "io": {
+    "export": "Exportar JSON",
+    "import": "Importar JSON",
+    "import_confirm": "Esto reemplazará todos los datos actuales. ¿Continuar?"
+  },
+  "footer": {
+    "source": "Código fuente",
+    "support": "Invítame a un café"
+  }
+}

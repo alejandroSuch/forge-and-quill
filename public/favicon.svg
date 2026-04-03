@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a1a22"/>
+      <stop offset="100%" stop-color="#1a1014"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0cc7a"/>
+      <stop offset="100%" stop-color="#d4a04a"/>
+    </linearGradient>
+    <linearGradient id="ember" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#c05830"/>
+      <stop offset="60%" stop-color="#d96b3f"/>
+      <stop offset="100%" stop-color="#e8b85c"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+  <!-- Anvil base -->
+  <path d="M140 340 h232 v24 c0 12-8 20-20 20 H160 c-12 0-20-8-20-20 z" fill="url(#gold)" opacity="0.9"/>
+  <!-- Anvil top -->
+  <path d="M170 300 h172 c16 0 28 8 28 20 v20 H142 v-20 c0-12 12-20 28-20z" fill="url(#gold)"/>
+  <!-- Anvil horn -->
+  <path d="M342 310 l40-10 c8-2 14 4 12 12 l-4 16 H370 z" fill="url(#gold)" opacity="0.85"/>
+  <!-- Quill feather -->
+  <path d="M320 100 c-20 30-60 80-90 160 l-8 20 c40-60 80-120 110-170 c4-6 0-14-12-10z" fill="url(#gold)" opacity="0.95"/>
+  <!-- Quill shaft -->
+  <line x1="228" y1="272" x2="310" y2="108" stroke="#e8b85c" stroke-width="3" opacity="0.7"/>
+  <!-- Quill nib -->
+  <path d="M222 280 l6-12 l4 8 z" fill="#e8b85c"/>
+  <!-- Forge sparks -->
+  <circle cx="230" cy="280" r="4" fill="url(#ember)" opacity="0.9"/>
+  <circle cx="250" cy="270" r="3" fill="url(#ember)" opacity="0.7"/>
+  <circle cx="210" cy="275" r="2.5" fill="url(#ember)" opacity="0.8"/>
+  <circle cx="240" cy="260" r="2" fill="#f0cc7a" opacity="0.6"/>
+  <circle cx="220" cy="265" r="1.5" fill="#f0cc7a" opacity="0.5"/>
+</svg>

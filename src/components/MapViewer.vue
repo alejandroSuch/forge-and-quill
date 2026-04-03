@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useCharacterStore } from '../stores/character'
 import { books } from '../data/books'
 
 defineEmits<{ close: [] }>()
 
+const { t } = useI18n()
 const store = useCharacterStore()
 
 const mapFiles: Record<number, string> = {
@@ -18,7 +20,6 @@ const mapFiles: Record<number, string> = {
 const currentMap = computed(() => mapFiles[store.book] ?? '')
 const currentTitle = computed(() => books.find(b => b.number === store.book)?.title ?? '')
 
-// Pan and zoom state
 const scale = ref(1)
 const translateX = ref(0)
 const translateY = ref(0)
@@ -28,7 +29,6 @@ const startY = ref(0)
 const lastTranslateX = ref(0)
 const lastTranslateY = ref(0)
 
-// Touch pinch state
 let initialPinchDistance = 0
 let initialScale = 1
 
@@ -86,25 +86,24 @@ const transform = computed(() => `translate(${translateX.value}px, ${translateY.
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 bg-black/80 flex flex-col" @click.self="$emit('close')">
-    <div class="flex justify-between items-center p-3 bg-vulcan-800/90">
+  <div class="fixed inset-0 z-50 bg-black/80 flex flex-col" @click.self="$emit('close')" role="dialog" aria-modal="true">
+    <div class="flex justify-between items-center p-3 bg-surface/90 backdrop-blur">
       <div>
-        <h2 class="font-heading text-gold-400 text-lg">Mapa</h2>
-        <p class="text-parchment/50 text-xs">{{ currentTitle }}</p>
+        <h2 class="font-heading text-accent text-lg">{{ t('map.title') }}</h2>
+        <p class="text-muted text-xs">{{ currentTitle }}</p>
       </div>
       <div class="flex gap-2">
-        <button @click="resetView" class="bg-vulcan-700 text-parchment/70 rounded px-3 py-1 text-xs">Reset</button>
-        <button @click="$emit('close')" class="text-parchment/50 text-xl px-2">&times;</button>
+        <button @click="resetView" class="bg-surface-alt text-muted rounded px-3 py-1 text-xs">{{ t('map.reset') }}</button>
+        <button @click="$emit('close')" class="text-muted text-xl px-2">&times;</button>
       </div>
     </div>
 
-    <!-- Book tabs -->
-    <div class="flex gap-1 px-3 py-2 bg-vulcan-800/70">
+    <div class="flex gap-1 px-3 py-2 bg-surface/70 backdrop-blur">
       <button
         v-for="b in books" :key="b.number"
         @click="store.book = b.number; resetView()"
         class="px-3 py-1 rounded text-xs"
-        :class="store.book === b.number ? 'bg-gold-500 text-vulcan-900' : 'bg-vulcan-700 text-parchment/70'"
+        :class="store.book === b.number ? 'bg-accent text-on-accent' : 'bg-surface-alt text-muted'"
       >
         {{ b.number }}
       </button>
@@ -128,9 +127,6 @@ const transform = computed(() => `translate(${translateX.value}px, ${translateY.
           draggable="false"
           @error="($event.target as HTMLImageElement).style.display = 'none'"
         />
-        <div class="absolute text-parchment/30 text-sm pointer-events-none">
-          Coloca las imagenes de mapa en public/images/map-book[1-5].jpg
-        </div>
       </div>
     </div>
   </div>
