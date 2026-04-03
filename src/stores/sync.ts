@@ -2,13 +2,12 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { useCharacterStore } from './character'
 import * as sheets from '../services/sheets'
+import { lsGetSheetId, lsSetSheetId, lsClearSheetId } from '../services/storage'
 
 export type SyncStatus = 'synced' | 'pending' | 'syncing' | 'offline' | 'error'
 
-const SHEET_ID_KEY = 'vv-sheet-id'
-
 export const useSyncStore = defineStore('sync', () => {
-  const sheetId = ref(localStorage.getItem(SHEET_ID_KEY) ?? '')
+  const sheetId = ref(lsGetSheetId())
   const status = ref<SyncStatus>(sheetId.value ? 'pending' : 'offline')
   const errorMsg = ref('')
   let syncTimer: ReturnType<typeof setTimeout> | null = null
@@ -17,7 +16,7 @@ export const useSyncStore = defineStore('sync', () => {
   function setSheetId(id: string) {
     const extracted = extractSheetId(id)
     sheetId.value = extracted
-    localStorage.setItem(SHEET_ID_KEY, extracted)
+    lsSetSheetId(extracted)
     // Also update URL
     const url = new URL(window.location.href)
     url.searchParams.set('id', extracted)
@@ -26,7 +25,7 @@ export const useSyncStore = defineStore('sync', () => {
 
   function clearSheetId() {
     sheetId.value = ''
-    localStorage.removeItem(SHEET_ID_KEY)
+    lsClearSheetId()
     status.value = 'offline'
     const url = new URL(window.location.href)
     url.searchParams.delete('id')

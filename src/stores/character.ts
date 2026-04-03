@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import type { God } from '../data/gods'
 import type { Companion } from '../data/companions'
+import { lsLoadCharacter, lsSaveCharacter, idbGetAll, idbPutAll, idbClearAll } from '../services/storage'
 
 export interface Possession {
   name: string
@@ -22,19 +23,10 @@ export interface Codeword {
   code: string
 }
 
-const STORAGE_KEY = 'vv-character'
-
-function loadFromStorage<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key)
-    if (raw) return JSON.parse(raw)
-  } catch { /* ignore */ }
-  return fallback
-}
-
 export const useCharacterStore = defineStore('character', () => {
-  const saved = loadFromStorage(STORAGE_KEY, {} as Record<string, unknown>)
+  const saved = lsLoadCharacter()
 
+  // Scalar fields: localStorage (sync read on boot)
   const name = ref<string>((saved.name as string) ?? '')
   const god = ref<God>((saved.god as God) ?? '')
   const companion = ref<Companion>((saved.companion as Companion) ?? '')
@@ -52,11 +44,31 @@ export const useCharacterStore = defineStore('character', () => {
   const money = ref<number>((saved.money as number) ?? 0)
   const location = ref<number>((saved.location as number) ?? 0)
 
-  const possessions = ref<Possession[]>((saved.possessions as Possession[]) ?? [])
-  const titles = ref<string[]>((saved.titles as string[]) ?? [])
-  const codewords = ref<Codeword[]>((saved.codewords as Codeword[]) ?? [])
-  const notes = ref<string[]>((saved.notes as string[]) ?? [])
-  const ticks = ref<TickEntry[]>((saved.ticks as TickEntry[]) ?? [])
+  // List fields: IndexedDB (async, loaded after mount)
+  const possessions = ref<Possession[]>([])
+  const titles = ref<string[]>([])
+  const codewords = ref<Codeword[]>([])
+  const notes = ref<string[]>([])
+  const ticks = ref<TickEntry[]>([])
+
+  const hydrated = ref(false)
+
+  // Load list data from IndexedDB
+  async function hydrateFromIDB() {
+    const [poss, cws, ts, ns, tk] = await Promise.all([
+      idbGetAll<Possession>('possessions'),
+      idbGetAll<Codeword>('codewords'),
+      idbGetAll<{ value: string }>('titles'),
+      idbGetAll<{ value: string }>('notes'),
+      idbGetAll<TickEntry>('ticks'),
+    ])
+    possessions.value = poss
+    codewords.value = cws
+    titles.value = ts.map(t => t.value)
+    notes.value = ns.map(n => n.value)
+    ticks.value = tk
+    hydrated.value = true
+  }
 
   // Attribute modifiers: max bonus from possessions per attribute
   const modifiers = computed(() => {
@@ -79,23 +91,50 @@ export const useCharacterStore = defineStore('character', () => {
     strength: strength.value + modifiers.value.strength - woundPenalty.value,
   }))
 
-  function toJSON() {
+  function scalarJSON() {
     return {
       name: name.value, god: god.value, companion: companion.value, book: book.value,
       charm: charm.value, grace: grace.value, ingenuity: ingenuity.value, strength: strength.value,
       blessings: blessings.value, wounded: wounded.value, glory: glory.value, scars: scars.value,
       money: money.value, location: location.value,
+    }
+  }
+
+  function toJSON() {
+    return {
+      ...scalarJSON(),
       possessions: possessions.value, titles: titles.value, codewords: codewords.value,
       notes: notes.value, ticks: ticks.value,
     }
   }
 
-  // Auto-persist to localStorage
-  watch(toJSON, (val) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
+  // Auto-persist scalars to localStorage
+  watch(scalarJSON, (val) => {
+    lsSaveCharacter(val)
   }, { deep: true })
 
-  function reset() {
+  // Auto-persist lists to IndexedDB (debounced per collection)
+  let idbTimer: ReturnType<typeof setTimeout> | null = null
+  function scheduleIDBWrite() {
+    if (idbTimer) clearTimeout(idbTimer)
+    idbTimer = setTimeout(() => persistLists(), 300)
+  }
+
+  async function persistLists() {
+    await Promise.all([
+      idbPutAll('possessions', possessions.value),
+      idbPutAll('codewords', codewords.value),
+      idbPutAll('titles', titles.value.map(v => ({ value: v }))),
+      idbPutAll('notes', notes.value.map(v => ({ value: v }))),
+      idbPutAll('ticks', ticks.value),
+    ])
+  }
+
+  watch([possessions, codewords, titles, notes, ticks], () => {
+    scheduleIDBWrite()
+  }, { deep: true })
+
+  async function reset() {
     name.value = ''
     god.value = ''
     companion.value = ''
@@ -115,6 +154,7 @@ export const useCharacterStore = defineStore('character', () => {
     codewords.value = []
     notes.value = []
     ticks.value = []
+    await idbClearAll()
   }
 
   return {
@@ -123,6 +163,6 @@ export const useCharacterStore = defineStore('character', () => {
     blessings, wounded, glory, scars, money, location,
     possessions, titles, codewords, notes, ticks,
     modifiers, woundPenalty, effective,
-    toJSON, reset,
+    toJSON, reset, hydrateFromIDB, hydrated,
   }
 })

@@ -9,11 +9,10 @@ import SyncIndicator from './components/SyncIndicator.vue'
 const sync = useSyncStore()
 const showSettings = ref(false)
 
-function changeSheet() {
+async function changeSheet() {
   const char = useCharacterStore()
-  char.reset()
+  await char.reset()
   sync.clearSheetId()
-  localStorage.removeItem('vv-character')
   showSettings.value = false
 }
 
