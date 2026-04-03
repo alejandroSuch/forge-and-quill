@@ -98,15 +98,17 @@ export const useCharacterStore = defineStore('character', () => {
     strength: strength.value + modifiers.value.strength - woundPenalty.value,
   }))
 
+  const snapshot = computed(() => ({
+    name: name.value, god: god.value, companion: companion.value, book: book.value,
+    charm: charm.value, grace: grace.value, ingenuity: ingenuity.value, strength: strength.value,
+    blessings: blessings.value, wounded: wounded.value, glory: glory.value, scars: scars.value,
+    money: money.value, location: location.value,
+    possessions: possessions.value, titles: titles.value, codewords: codewords.value,
+    notes: notes.value, ticks: ticks.value,
+  }))
+
   function toJSON() {
-    return {
-      name: name.value, god: god.value, companion: companion.value, book: book.value,
-      charm: charm.value, grace: grace.value, ingenuity: ingenuity.value, strength: strength.value,
-      blessings: blessings.value, wounded: wounded.value, glory: glory.value, scars: scars.value,
-      money: money.value, location: location.value,
-      possessions: possessions.value, titles: titles.value, codewords: codewords.value,
-      notes: notes.value, ticks: ticks.value,
-    }
+    return snapshot.value
   }
 
   // Auto-persist everything to IndexedDB (debounced)
@@ -116,7 +118,7 @@ export const useCharacterStore = defineStore('character', () => {
     saveTimer = setTimeout(() => idbSave(toJSON()), 300)
   }
 
-  watch(toJSON, () => {
+  watch(snapshot, () => {
     if (hydrated.value) scheduleSave()
   }, { deep: true })
 
