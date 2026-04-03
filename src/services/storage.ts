@@ -71,9 +71,8 @@ function stripId<T>(obj: T & { _id?: number }): T {
   return rest as T
 }
 
-// localStorage helpers (unchanged semantics, centralized)
+// localStorage helpers
 const LS_CHAR_KEY = 'vv-character'
-const LS_SHEET_KEY = 'vv-sheet-id'
 
 export function lsLoadCharacter(): Record<string, unknown> {
   try {
@@ -85,16 +84,4 @@ export function lsLoadCharacter(): Record<string, unknown> {
 
 export function lsSaveCharacter(data: Record<string, unknown>): void {
   localStorage.setItem(LS_CHAR_KEY, JSON.stringify(data))
-}
-
-export function lsGetSheetId(): string {
-  return localStorage.getItem(LS_SHEET_KEY) ?? ''
-}
-
-export function lsSetSheetId(id: string): void {
-  localStorage.setItem(LS_SHEET_KEY, id)
-}
-
-export function lsClearSheetId(): void {
-  localStorage.removeItem(LS_SHEET_KEY)
 }
