@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-parchment: #f5e6c8;
+  --color-parchment-dark: #e8d5a8;
+  --color-vulcan-900: #1a1014;
+  --color-vulcan-800: #2a1a22;
+  --color-vulcan-700: #3d2832;
+  --color-vulcan-600: #5a3a45;
+  --color-gold-500: #d4a04a;
+  --color-gold-400: #e8b85c;
+  --color-gold-300: #f0cc7a;
+  --color-ember-500: #c05830;
+  --color-ember-400: #d96b3f;
+  --font-heading: 'Marcellus', Georgia, serif;
+}
+
+body {
+  background-color: var(--color-vulcan-900);
+  color: var(--color-parchment);
+  font-family: system-ui, sans-serif;
+}
