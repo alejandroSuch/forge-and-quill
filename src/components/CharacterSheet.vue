@@ -147,11 +147,25 @@ function toggle(panel: Panel) {
   </div>
 
   <!-- Panels -->
-  <PossessionsModal v-if="activePanel === 'possessions'" @close="activePanel = null" />
-  <CodewordsPanel v-if="activePanel === 'codewords'" @close="activePanel = null" />
-  <TicksPanel v-if="activePanel === 'ticks'" @close="activePanel = null" />
-  <TitlesModal v-if="activePanel === 'titles'" @close="activePanel = null" />
-  <NotesModal v-if="activePanel === 'notes'" @close="activePanel = null" />
-  <MapViewer v-if="activePanel === 'map'" @close="activePanel = null" />
-  <DiceRoller v-if="activePanel === 'dice'" @close="activePanel = null" />
+  <Transition name="modal">
+    <PossessionsModal v-if="activePanel === 'possessions'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <CodewordsPanel v-if="activePanel === 'codewords'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <TicksPanel v-if="activePanel === 'ticks'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <TitlesModal v-if="activePanel === 'titles'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <NotesModal v-if="activePanel === 'notes'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <MapViewer v-if="activePanel === 'map'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <DiceRoller v-if="activePanel === 'dice'" @close="activePanel = null" />
+  </Transition>
 </template>

@@ -64,19 +64,21 @@ async function handleImport(e: Event) {
     <AppFooter />
 
     <!-- Reset confirmation modal -->
-    <div v-if="showResetConfirm" class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="showResetConfirm = false">
-      <div class="bg-surface rounded-t-2xl w-full max-w-md p-4 text-center space-y-4">
-        <h2 class="font-heading text-accent text-lg">{{ t('app.reset_confirm_title') }}</h2>
-        <p class="text-muted text-sm">{{ t('app.reset_confirm_msg') }}</p>
-        <div class="flex gap-2">
-          <button @click="showResetConfirm = false" class="flex-1 bg-surface-alt text-text rounded-lg py-2.5 text-sm border border-border">
-            {{ t('app.cancel') }}
-          </button>
-          <button @click="confirmReset" class="flex-1 bg-danger text-on-accent rounded-lg py-2.5 text-sm font-heading">
-            {{ t('app.confirm') }}
-          </button>
+    <Transition name="modal">
+      <div v-if="showResetConfirm" class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="showResetConfirm = false">
+        <div class="bg-surface rounded-t-2xl w-full max-w-md p-4 text-center space-y-4">
+          <h2 class="font-heading text-accent text-lg">{{ t('app.reset_confirm_title') }}</h2>
+          <p class="text-muted text-sm">{{ t('app.reset_confirm_msg') }}</p>
+          <div class="flex gap-2">
+            <button @click="showResetConfirm = false" class="flex-1 bg-surface-alt text-text rounded-lg py-2.5 text-sm border border-border">
+              {{ t('app.cancel') }}
+            </button>
+            <button @click="confirmReset" class="flex-1 bg-danger text-on-accent rounded-lg py-2.5 text-sm font-heading">
+              {{ t('app.confirm') }}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
