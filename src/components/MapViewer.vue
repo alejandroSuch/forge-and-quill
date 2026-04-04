@@ -9,12 +9,13 @@ defineEmits<{ close: [] }>()
 const { t } = useI18n()
 const store = useCharacterStore()
 
+const base = import.meta.env.BASE_URL
 const mapFiles: Record<number, string> = {
-  1: '/images/map-book1.jpg',
-  2: '/images/map-book2.jpg',
-  3: '/images/map-book3.jpg',
-  4: '/images/map-book4.jpg',
-  5: '/images/map-book5.jpg',
+  1: `${base}images/map-book1.jpg`,
+  2: `${base}images/map-book2.jpg`,
+  3: `${base}images/map-book3.jpg`,
+  4: `${base}images/map-book4.jpg`,
+  5: `${base}images/map-book5.jpg`,
 }
 
 const currentMap = computed(() => mapFiles[store.book] ?? '')
