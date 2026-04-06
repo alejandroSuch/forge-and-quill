@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
     tailwindcss(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['images/*'],
       manifest: {
         name: 'Forge & Quill',

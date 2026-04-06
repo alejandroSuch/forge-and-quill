@@ -52,6 +52,16 @@ export const useCharacterStore = defineStore('character', () => {
   async function hydrate() {
     const saved = await idbLoad()
     if (!saved || !Object.keys(saved).length) {
+      // Reset to defaults for empty/new slots
+      name.value = ''
+      god.value = ''
+      companion.value = ''
+      book.value = 1
+      charm.value = 0; grace.value = 0; ingenuity.value = 0; strength.value = 0
+      blessings.value = 0; wounded.value = false
+      glory.value = 0; scars.value = 0; money.value = 0; location.value = 0
+      possessions.value = []; titles.value = []; codewords.value = []
+      notes.value = []; ticks.value = []
       hydrated.value = true
       return
     }

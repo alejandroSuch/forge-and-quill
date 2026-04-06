@@ -13,13 +13,14 @@ import TitlesModal from './TitlesModal.vue'
 import NotesModal from './NotesModal.vue'
 import MapViewer from './MapViewer.vue'
 import DiceRoller from './DiceRoller.vue'
+import RulesReference from './RulesReference.vue'
 
 const { t } = useI18n()
 const store = useCharacterStore()
 
 const currentBook = computed(() => books.find(b => b.number === store.book) ?? books[0])
 
-type Panel = 'possessions' | 'codewords' | 'ticks' | 'titles' | 'notes' | 'map' | 'dice' | null
+type Panel = 'possessions' | 'codewords' | 'ticks' | 'titles' | 'notes' | 'map' | 'dice' | 'rules' | null
 const activePanel = ref<Panel>(null)
 
 function toggle(panel: Panel) {
@@ -140,8 +141,11 @@ function toggle(panel: Panel) {
       <button @click="toggle('map')" class="bg-surface rounded-lg py-3 text-sm text-accent font-heading active:bg-surface-alt">
         {{ t('panels.map') }}
       </button>
-      <button @click="toggle('dice')" class="col-span-3 bg-surface rounded-lg py-3 text-sm text-accent font-heading active:bg-surface-alt">
+      <button @click="toggle('dice')" class="col-span-2 bg-surface rounded-lg py-3 text-sm text-accent font-heading active:bg-surface-alt">
         🎲 {{ t('panels.dice') }}
+      </button>
+      <button @click="toggle('rules')" class="bg-surface rounded-lg py-3 text-sm text-accent font-heading active:bg-surface-alt">
+        {{ t('panels.rules') }}
       </button>
     </div>
   </div>
@@ -167,5 +171,8 @@ function toggle(panel: Panel) {
   </Transition>
   <Transition name="modal">
     <DiceRoller v-if="activePanel === 'dice'" @close="activePanel = null" />
+  </Transition>
+  <Transition name="modal">
+    <RulesReference v-if="activePanel === 'rules'" @close="activePanel = null" />
   </Transition>
 </template>

@@ -7,7 +7,10 @@
     "confirm": "Eliminar",
     "cancel": "Cancelar",
     "export": "Exportar",
-    "import": "Importar"
+    "import": "Importar",
+    "characters": "Personajes",
+    "share": "Compartir",
+    "rules": "Reglas"
   },
   "character": {
     "book": "Libro",
@@ -38,14 +41,16 @@
     "titles": "Títulos",
     "notes": "Notas",
     "map": "Mapa",
-    "dice": "Dados"
+    "dice": "Dados",
+    "rules": "Reglas"
   },
   "possessions": {
     "title": "Objetos ({count}/20)",
     "item_name": "Nombre del objeto",
     "save": "Guardar",
     "cancel": "Cancelar",
-    "add": "+ Añadir objeto"
+    "add": "+ Añadir objeto",
+    "empty": "Sin objetos. Pulsa abajo para añadir tu primera posesión."
   },
   "dice": {
     "title": "Dados",
@@ -56,22 +61,27 @@
     "auto_fail": "FALLO AUTOMÁTICO",
     "auto_success": "ÉXITO AUTOMÁTICO",
     "success": "ÉXITO",
-    "fail": "FALLO"
+    "fail": "FALLO",
+    "history": "Historial",
+    "no_history": "Sin tiradas aún"
   },
   "notes": {
     "title": "Notas ({count})",
-    "placeholder": "Nueva nota..."
+    "placeholder": "Nueva nota...",
+    "empty": "Sin notas. Añade tu primera nota abajo."
   },
   "titles": {
     "title": "Títulos ({count})"
   },
   "codewords": {
     "title": "Codewords",
-    "book_info": "Libro {n}: {title} ({active}/{total})"
+    "book_info": "Libro {n}: {title} ({active}/{total})",
+    "empty": "Sin codewords para este libro."
   },
   "ticks": {
     "title": "Tick Boxes",
-    "book_info": "Libro {n}: {title}"
+    "book_info": "Libro {n}: {title}",
+    "empty": "Sin secciones de ticks para este libro."
   },
   "map": {
     "title": "Mapa",
@@ -80,7 +90,37 @@
   "io": {
     "export": "Exportar JSON",
     "import": "Importar JSON",
-    "import_confirm": "Esto reemplazará todos los datos actuales. ¿Continuar?"
+    "import_confirm": "Esto reemplazará todos los datos actuales. ¿Continuar?",
+    "export_done": "Personaje exportado",
+    "import_done": "Personaje importado"
+  },
+  "slots": {
+    "title": "Personajes",
+    "new_placeholder": "Nombre del nuevo personaje...",
+    "new_default_name": "Nuevo personaje",
+    "create": "Crear",
+    "delete_confirm": "¿Eliminar este personaje?"
+  },
+  "rules": {
+    "title": "Referencia rápida",
+    "skill_check": "Pruebas de habilidad",
+    "skill_check_desc": "Tira 2d6 + puntuación del atributo. Iguala o supera la dificultad para tener éxito.",
+    "combat": "Combate",
+    "combat_desc": "El combate usa tiradas enfrentadas. Ambos bandos tiran 2d6 + atributo relevante. El total más alto gana la ronda.",
+    "blessings": "Bendiciones",
+    "blessings_desc": "Gasta una bendición para volver a tirar una prueba fallida. Puedes tener hasta 3 bendiciones.",
+    "wounds": "Heridas",
+    "wounds_desc": "Cuando estás herido, todos los atributos sufren una penalización de -1 hasta que te cures.",
+    "doubles": "Dobles",
+    "doubles_desc": "Doble 1 siempre falla. Doble 6 siempre tiene éxito, sin importar la dificultad."
+  },
+  "update": {
+    "available": "Nueva versión disponible",
+    "reload": "Actualizar"
+  },
+  "share": {
+    "title": "Ficha de personaje",
+    "not_supported": "Compartir no disponible en este dispositivo"
   },
   "footer": {
     "source": "Código fuente",

@@ -3,16 +3,22 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCharacterStore } from './stores/character'
 import { useTheme } from './composables/useTheme'
+import { useToast } from './composables/useToast'
 import { setLanguage } from './i18n'
 import { exportCharacter, importCharacter } from './services/io'
 import CharacterSheet from './components/CharacterSheet.vue'
+import CharacterSlots from './components/CharacterSlots.vue'
 import AppFooter from './components/AppFooter.vue'
+import ToastContainer from './components/ToastContainer.vue'
+import UpdatePrompt from './components/UpdatePrompt.vue'
 
 const { t, locale } = useI18n()
 const char = useCharacterStore()
 const { isDark, toggle: toggleTheme } = useTheme()
+const { show: showToast } = useToast()
 
 const showResetConfirm = ref(false)
+const showSlots = ref(false)
 const fileInput = ref<HTMLInputElement>()
 
 function switchLang() {
@@ -26,6 +32,7 @@ async function confirmReset() {
 
 function handleExport() {
   exportCharacter(char.toJSON())
+  showToast(t('io.export_done'), 'success')
 }
 
 async function handleImport(e: Event) {
@@ -33,14 +40,34 @@ async function handleImport(e: Event) {
   if (!file) return
   if (!window.confirm(t('io.import_confirm'))) return
   await importCharacter(file, char)
+  showToast(t('io.import_done'), 'success')
   if (fileInput.value) fileInput.value.value = ''
+}
+
+async function handleShare() {
+  const data = char.toJSON()
+  const text = `${data.name || 'Character'}\n` +
+    `C:${data.charm} G:${data.grace} I:${data.ingenuity} S:${data.strength}\n` +
+    `Glory:${data.glory} Scars:${data.scars} Pyr:${data.money}`
+
+  if (navigator.share) {
+    await navigator.share({ title: t('share.title'), text })
+  } else {
+    await navigator.clipboard.writeText(text)
+    showToast(t('share.title'), 'success')
+  }
+}
+
+async function handleSlotSwitch(_slot: string) {
+  showSlots.value = false
+  await char.hydrate()
 }
 </script>
 
 <template>
   <div class="min-h-dvh flex flex-col">
-    <header class="bg-surface border-b border-border px-4 py-3 sticky top-0 z-50 flex items-center gap-2">
-      <button @click="toggleTheme" class="text-muted text-lg" :aria-label="isDark ? 'Light mode' : 'Dark mode'">
+    <header class="bg-surface border-b border-border px-3 py-3 sticky top-0 z-50 flex items-center gap-1.5">
+      <button @click="toggleTheme" class="text-muted text-base" :aria-label="isDark ? 'Light mode' : 'Dark mode'">
         {{ isDark ? '☀️' : '🌙' }}
       </button>
       <button @click="switchLang" class="text-muted text-xs font-medium uppercase">
@@ -49,6 +76,8 @@ async function handleImport(e: Event) {
 
       <h1 class="font-heading text-accent text-lg tracking-wide flex-1 text-center">{{ t('app.title') }}</h1>
 
+      <button @click="showSlots = true" class="text-muted text-xs" :aria-label="t('app.characters')">👤</button>
+      <button @click="handleShare" class="text-muted text-xs" :aria-label="t('app.share')">↗</button>
       <button @click="handleExport" class="text-muted text-xs" :aria-label="t('app.export')">↓</button>
       <button @click="fileInput?.click()" class="text-muted text-xs" :aria-label="t('app.import')">↑</button>
       <input ref="fileInput" type="file" accept=".json" class="hidden" @change="handleImport" />
@@ -62,6 +91,8 @@ async function handleImport(e: Event) {
     </main>
 
     <AppFooter />
+    <ToastContainer />
+    <UpdatePrompt />
 
     <!-- Reset confirmation modal -->
     <Transition name="modal">
@@ -79,6 +110,11 @@ async function handleImport(e: Event) {
           </div>
         </div>
       </div>
+    </Transition>
+
+    <!-- Character slots modal -->
+    <Transition name="modal">
+      <CharacterSlots v-if="showSlots" @close="showSlots = false" @switch="handleSlotSwitch" />
     </Transition>
   </div>
 </template>

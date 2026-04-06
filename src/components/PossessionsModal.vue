@@ -2,11 +2,14 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCharacterStore, type Possession } from '../stores/character'
+import { useSwipeDown } from '../composables/useSwipeDown'
 
-defineEmits<{ close: [] }>()
+const emit = defineEmits<{ close: [] }>()
 
 const { t } = useI18n()
 const store = useCharacterStore()
+const panelRef = ref<HTMLElement | null>(null)
+const { translateY, dragging } = useSwipeDown(panelRef, () => emit('close'))
 
 const editing = ref<number | null>(null)
 const form = ref<Possession>({ name: '', charm: 0, grace: 0, ingenuity: 0, strength: 0 })
@@ -42,11 +45,21 @@ const attrs = ['charm', 'grace', 'ingenuity', 'strength'] as const
 
 <template>
   <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="$emit('close')" role="dialog" aria-modal="true">
-    <div class="bg-surface rounded-t-2xl w-full max-w-md max-h-[85dvh] overflow-y-auto p-4">
+    <div
+      ref="panelRef"
+      class="bg-surface rounded-t-2xl w-full max-w-md max-h-[85dvh] overflow-y-auto p-4"
+      :style="{ transform: translateY > 0 ? `translateY(${translateY}px)` : '', transition: dragging ? 'none' : '' }"
+    >
+      <div class="flex justify-center mb-2"><div class="w-10 h-1 rounded-full bg-border"></div></div>
       <div class="flex justify-between items-center mb-3">
         <h2 class="font-heading text-accent text-lg">{{ t('possessions.title', { count: store.possessions.length }) }}</h2>
         <button @click="$emit('close')" class="text-muted text-xl px-2">&times;</button>
       </div>
+
+      <!-- Empty state -->
+      <p v-if="store.possessions.length === 0 && editing === null" class="text-muted text-sm text-center py-6">
+        {{ t('possessions.empty') }}
+      </p>
 
       <div class="space-y-2 mb-3">
         <div

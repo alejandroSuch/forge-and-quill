@@ -7,7 +7,10 @@
     "confirm": "Delete",
     "cancel": "Cancel",
     "export": "Export",
-    "import": "Import"
+    "import": "Import",
+    "characters": "Characters",
+    "share": "Share",
+    "rules": "Rules"
   },
   "character": {
     "book": "Book",
@@ -38,14 +41,16 @@
     "titles": "Titles",
     "notes": "Notes",
     "map": "Map",
-    "dice": "Dice"
+    "dice": "Dice",
+    "rules": "Rules"
   },
   "possessions": {
     "title": "Items ({count}/20)",
     "item_name": "Item name",
     "save": "Save",
     "cancel": "Cancel",
-    "add": "+ Add item"
+    "add": "+ Add item",
+    "empty": "No items yet. Tap below to add your first possession."
   },
   "dice": {
     "title": "Dice",
@@ -56,22 +61,27 @@
     "auto_fail": "AUTO FAIL",
     "auto_success": "AUTO SUCCESS",
     "success": "SUCCESS",
-    "fail": "FAIL"
+    "fail": "FAIL",
+    "history": "History",
+    "no_history": "No rolls yet"
   },
   "notes": {
     "title": "Notes ({count})",
-    "placeholder": "New note..."
+    "placeholder": "New note...",
+    "empty": "No notes yet. Add your first note below."
   },
   "titles": {
     "title": "Titles ({count})"
   },
   "codewords": {
     "title": "Codewords",
-    "book_info": "Book {n}: {title} ({active}/{total})"
+    "book_info": "Book {n}: {title} ({active}/{total})",
+    "empty": "No codewords for this book."
   },
   "ticks": {
     "title": "Tick Boxes",
-    "book_info": "Book {n}: {title}"
+    "book_info": "Book {n}: {title}",
+    "empty": "No tick sections for this book."
   },
   "map": {
     "title": "Map",
@@ -80,7 +90,37 @@
   "io": {
     "export": "Export JSON",
     "import": "Import JSON",
-    "import_confirm": "This will replace all current data. Continue?"
+    "import_confirm": "This will replace all current data. Continue?",
+    "export_done": "Character exported",
+    "import_done": "Character imported"
+  },
+  "slots": {
+    "title": "Characters",
+    "new_placeholder": "New character name...",
+    "new_default_name": "New Character",
+    "create": "Create",
+    "delete_confirm": "Delete this character?"
+  },
+  "rules": {
+    "title": "Quick Reference",
+    "skill_check": "Skill Checks",
+    "skill_check_desc": "Roll 2d6 + attribute score. Meet or exceed the difficulty number to succeed.",
+    "combat": "Combat",
+    "combat_desc": "Combat uses opposed rolls. Both sides roll 2d6 + relevant attribute. Highest total wins the round.",
+    "blessings": "Blessings",
+    "blessings_desc": "Spend a blessing to re-roll a failed check. You can hold up to 3 blessings at a time.",
+    "wounds": "Wounds",
+    "wounds_desc": "When wounded, all attribute scores suffer a -1 penalty until healed.",
+    "doubles": "Doubles",
+    "doubles_desc": "Double 1s always fail. Double 6s always succeed, regardless of difficulty."
+  },
+  "update": {
+    "available": "New version available",
+    "reload": "Update"
+  },
+  "share": {
+    "title": "Character Sheet",
+    "not_supported": "Share not available on this device"
   },
   "footer": {
     "source": "Source code",

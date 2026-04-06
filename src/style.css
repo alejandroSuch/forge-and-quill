@@ -82,11 +82,35 @@ body {
   transform: translateY(100%);
 }
 
+/* Dice spin animation */
+@keyframes dice-spin {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+.animate-dice-spin {
+  animation: dice-spin 0.3s ease-out;
+}
+
+/* Loading skeleton pulse */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+.skeleton {
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+  background-color: var(--surface-alt);
+  border-radius: 0.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .modal-enter-active,
   .modal-enter-active > :last-child,
   .modal-leave-active,
   .modal-leave-active > :last-child {
     transition-duration: 0.01ms !important;
+  }
+  .animate-dice-spin,
+  .skeleton {
+    animation: none !important;
   }
 }

@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCharacterStore } from '../stores/character'
 import { titles as allTitles } from '../data/titles'
+import { useSwipeDown } from '../composables/useSwipeDown'
 
-defineEmits<{ close: [] }>()
+const emit = defineEmits<{ close: [] }>()
 
 const { t } = useI18n()
 const store = useCharacterStore()
+const panelRef = ref<HTMLElement | null>(null)
+const { translateY, dragging } = useSwipeDown(panelRef, () => emit('close'))
 
 function hasTitle(t: string): boolean {
   return store.titles.includes(t)
@@ -24,7 +28,12 @@ function toggle(t: string) {
 
 <template>
   <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center" @click.self="$emit('close')" role="dialog" aria-modal="true">
-    <div class="bg-surface rounded-t-2xl w-full max-w-md max-h-[85dvh] overflow-y-auto p-4">
+    <div
+      ref="panelRef"
+      class="bg-surface rounded-t-2xl w-full max-w-md max-h-[85dvh] overflow-y-auto p-4"
+      :style="{ transform: translateY > 0 ? `translateY(${translateY}px)` : '', transition: dragging ? 'none' : '' }"
+    >
+      <div class="flex justify-center mb-2"><div class="w-10 h-1 rounded-full bg-border"></div></div>
       <div class="flex justify-between items-center mb-3">
         <h2 class="font-heading text-accent text-lg">{{ t('titles.title', { count: store.titles.length }) }}</h2>
         <button @click="$emit('close')" class="text-muted text-xl px-2">&times;</button>
