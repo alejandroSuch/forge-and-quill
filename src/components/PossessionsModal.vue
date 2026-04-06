@@ -85,7 +85,7 @@ const attrs = ['charm', 'grace', 'ingenuity', 'strength'] as const
         <div class="grid grid-cols-4 gap-2">
           <div v-for="a in attrs" :key="a" class="text-center">
             <label class="text-accent text-xs block">{{ a.charAt(0).toUpperCase() }}</label>
-            <input v-model.number="(form as any)[a]" type="number" min="-5" max="5" class="w-full bg-bg text-text text-center rounded py-1 text-sm border border-border" />
+            <input v-model.number="(form as any)[a]" type="text" inputmode="numeric" pattern="-?[0-9]*" class="w-full bg-bg text-text text-center rounded py-1 text-sm border border-border" />
           </div>
         </div>
         <div class="flex gap-2">

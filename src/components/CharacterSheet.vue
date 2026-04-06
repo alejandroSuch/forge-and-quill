@@ -47,7 +47,7 @@ function toggle(panel: Panel) {
         </div>
         <div class="w-28">
           <label class="text-accent text-xs font-heading block mb-1">{{ t('character.section') }}</label>
-          <input v-model.number="store.location" type="number" min="0" :max="currentBook.pages" class="w-full bg-surface-alt text-text rounded px-2 py-1.5 text-sm border border-border" />
+          <input v-model.number="store.location" type="text" inputmode="numeric" pattern="[0-9]*" min="0" :max="currentBook.pages" class="w-full bg-surface-alt text-text rounded px-2 py-1.5 text-sm border border-border" />
         </div>
       </div>
       <div class="flex gap-2">
@@ -114,7 +114,7 @@ function toggle(panel: Panel) {
           <label class="text-accent text-xs font-heading block mb-1">{{ stat.label }}</label>
           <div class="flex items-center justify-center gap-1">
             <button @click="(store as any)[stat.key] > 0 && (store as any)[stat.key]--" class="w-7 h-7 rounded bg-surface-alt active:bg-border text-sm">-</button>
-            <input v-model.number="(store as any)[stat.key]" type="number" min="0" class="w-14 bg-surface-alt text-text text-center rounded py-1 text-sm border border-border" />
+            <input v-model.number="(store as any)[stat.key]" type="text" inputmode="numeric" pattern="[0-9]*" min="0" class="w-14 bg-surface-alt text-text text-center rounded py-1 text-sm border border-border" />
             <button @click="(store as any)[stat.key]++" class="w-7 h-7 rounded bg-surface-alt active:bg-border text-sm">+</button>
           </div>
         </div>
