@@ -68,7 +68,8 @@
   "notes": {
     "title": "Notes ({count})",
     "placeholder": "New note...",
-    "empty": "No notes yet. Add your first note below."
+    "empty": "No notes yet. Add your first note below.",
+    "delete_confirm": "Delete this note?"
   },
   "titles": {
     "title": "Titles ({count})"
