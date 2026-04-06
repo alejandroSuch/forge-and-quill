@@ -14,7 +14,9 @@ app.use(i18n)
 // Migrate v1 data if present, then hydrate
 const character = useCharacterStore(pinia)
 migrateV1()
+  .catch(() => {}) // v1 store may not exist
   .then(() => character.hydrate())
+  .catch(e => console.error('Hydration failed:', e))
   .finally(() => {
     app.mount('#app')
   })
