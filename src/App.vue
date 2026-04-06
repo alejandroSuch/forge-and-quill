@@ -10,7 +10,6 @@ import CharacterSheet from './components/CharacterSheet.vue'
 import CharacterSlots from './components/CharacterSlots.vue'
 import AppFooter from './components/AppFooter.vue'
 import ToastContainer from './components/ToastContainer.vue'
-import UpdatePrompt from './components/UpdatePrompt.vue'
 
 const { t, locale } = useI18n()
 const char = useCharacterStore()
@@ -92,7 +91,6 @@ async function handleSlotSwitch(_slot: string) {
 
     <AppFooter />
     <ToastContainer />
-    <UpdatePrompt />
 
     <!-- Reset confirmation modal -->
     <Transition name="modal">
