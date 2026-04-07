@@ -57,9 +57,12 @@ async function handleShare() {
   }
 }
 
-async function handleSlotSwitch(_slot: string) {
+async function handleSlotSwitch(slot: string) {
   showSlots.value = false
   await char.hydrate()
+  if (!char.name && slot !== 'default') {
+    char.name = slot
+  }
 }
 </script>
 
