@@ -124,7 +124,6 @@
     "not_supported": "Compartir no disponible en este dispositivo"
   },
   "footer": {
-    "source": "Código fuente",
-    "support": "Invítame a un café"
+    "source": "Código fuente"
   }
 }

@@ -124,7 +124,6 @@
     "not_supported": "Share not available on this device"
   },
   "footer": {
-    "source": "Source code",
-    "support": "Buy me a coffee"
+    "source": "Source code"
   }
 }
